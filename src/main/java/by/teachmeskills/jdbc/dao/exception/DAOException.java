@@ -1,5 +1,8 @@
 package by.teachmeskills.jdbc.dao.exception;
 
+/**
+ * DAO exception
+ */
 public class DAOException extends RuntimeException {
 
     public DAOException() {
