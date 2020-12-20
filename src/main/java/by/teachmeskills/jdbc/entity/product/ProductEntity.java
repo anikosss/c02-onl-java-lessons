@@ -1,12 +1,28 @@
 package by.teachmeskills.jdbc.entity.product;
 
-import by.teachmeskills.jdbc.entity.Entity;
+import by.teachmeskills.jdbc.entity.AbstractEntity;
+import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.Table;
 
-public class ProductEntity extends Entity {
+@Entity
+@Table(name = "products")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+public class ProductEntity extends AbstractEntity {
 
     private String title;
     private String description;
     private double price;
+
+    public ProductEntity() {}
+
+    public ProductEntity(String title, String description, double price) {
+        super();
+        this.title = title;
+        this.description = description;
+        this.price = price;
+    }
 
     public ProductEntity(Long id, String title, String description, double price, Long timestamp) {
         super(id, timestamp);

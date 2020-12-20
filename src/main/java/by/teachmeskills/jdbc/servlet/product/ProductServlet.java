@@ -1,6 +1,7 @@
 package by.teachmeskills.jdbc.servlet.product;
 
 import by.teachmeskills.jdbc.dao.impl.mysql.init.MySqlDAOInitializer;
+import by.teachmeskills.jdbc.dao.impl.orm.init.OrmDAOInitializer;
 import by.teachmeskills.jdbc.dao.init.DAOInitializer;
 import by.teachmeskills.jdbc.service.dto.ProductDTO;
 import by.teachmeskills.jdbc.service.product.ProductService;
@@ -20,7 +21,8 @@ import org.apache.logging.log4j.Logger;
 public class ProductServlet extends HttpServlet {
 
     private static final Logger LOGGER = LogManager.getLogger(ProductServlet.class);
-    private static final DAOInitializer DAO_INITIALIZER = new MySqlDAOInitializer();
+    private static final DAOInitializer MYSQl_DAO_INITIALIZER = new MySqlDAOInitializer();
+    private static final DAOInitializer ORM_DAO_INITIALIZER = new OrmDAOInitializer();
 
     private static final String PRODUCTS_KEY = "products";
 
@@ -29,7 +31,8 @@ public class ProductServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-        DAO_INITIALIZER.init();
+        MYSQl_DAO_INITIALIZER.init();
+        ORM_DAO_INITIALIZER.init();
         LOGGER.info("Products servlet initialized");
     }
 

@@ -23,4 +23,9 @@ public class MySqlDAOInitializer implements DAOInitializer {
             }
         }
     }
+
+    @Override
+    public void destroy() {
+
+    }
 }
