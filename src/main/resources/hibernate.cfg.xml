@@ -25,5 +25,9 @@
         <property name="hibernate.dbcp.minIdle">5</property>
 <!--        <property name="hibernate.dbcp.maxWaitMillis">-1</property>-->
         <mapping class="by.teachmeskills.jdbc.entity.product.ProductEntity" />
+        <mapping class="by.teachmeskills.jdbc.entity.client.ClientEntity" />
+        <mapping class="by.teachmeskills.jdbc.entity.order.OrderEntity" />
+        <mapping class="by.teachmeskills.jdbc.entity.address.AddressEntity" />
+        <mapping class="by.teachmeskills.jdbc.entity.order.product.OrderProductEntity" />
     </session-factory>
 </hibernate-configuration>

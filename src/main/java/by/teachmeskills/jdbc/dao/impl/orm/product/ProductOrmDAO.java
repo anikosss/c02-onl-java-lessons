@@ -13,8 +13,15 @@ import org.hibernate.query.Query;
 public class ProductOrmDAO extends ORMAbstractDAO<ProductEntity> implements ProductDAO {
 
     @Override
-    public ProductEntity getByTitle(String title) {
-        return null;
+    public Optional<ProductEntity> getByTitle(String title) {
+        try (Session session = openSession()) {
+            Query<ProductEntity> query = session.createQuery(ProductHQLQueries.GET_BY_TITLE, getEntityClass());
+            query.setParameter(ProductEntityFields.TITLE, title);
+            return query.uniqueResultOptional();
+        } catch (Exception e) {
+            LOGGER.error("Unable to read product entity: {}", e.getMessage(), e);
+            throw new DAOException("Unable to get product by title", e);
+        }
     }
 
     @Override
