@@ -23,8 +23,8 @@ public class MySqlProductDAO extends MySqlAbstractDAO<ProductEntity> implements 
     }
 
     @Override
-    public ProductEntity getEntity(Long id) throws DAOException {
-        return null;
+    public Optional<ProductEntity> getEntity(Long id) throws DAOException {
+        return Optional.empty();
     }
 
     @Override
@@ -59,7 +59,7 @@ public class MySqlProductDAO extends MySqlAbstractDAO<ProductEntity> implements 
     }
 
     @Override
-    public ProductEntity getByTitle(String title) {
+    public Optional<ProductEntity> getByTitle(String title) {
         return null;
     }
 

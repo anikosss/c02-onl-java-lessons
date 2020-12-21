@@ -6,8 +6,8 @@ public class ProductDTO extends EntityDTO {
     private String description;
     private double price;
 
-    public ProductDTO(Long id, String title, String description, double price, Long timestamp) {
-        super(id, timestamp);
+    public ProductDTO(Long id, String title, String description, double price) {
+        super(id);
         this.title = title;
         this.description = description;
         this.price = price;

@@ -3,11 +3,9 @@ package by.teachmeskills.jdbc.service.dto;
 public abstract class EntityDTO {
 
     protected Long id;
-    protected Long timestamp;
 
-    public EntityDTO(Long id, Long timestamp) {
+    public EntityDTO(Long id) {
         this.id = id;
-        this.timestamp = timestamp;
     }
 
     public Long getId() {
@@ -16,13 +14,5 @@ public abstract class EntityDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Long timestamp) {
-        this.timestamp = timestamp;
     }
 }

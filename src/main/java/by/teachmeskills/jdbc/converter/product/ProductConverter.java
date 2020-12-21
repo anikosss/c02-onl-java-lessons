@@ -8,6 +8,6 @@ public class ProductConverter extends AbstractConverter<ProductEntity, ProductDT
 
     @Override
     public ProductDTO convert(ProductEntity entity) {
-        return new ProductDTO(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getPrice(), entity.getTimestamp());
+        return new ProductDTO(entity.getId(), entity.getTitle(), entity.getDescription(), entity.getPrice());
     }
 }
