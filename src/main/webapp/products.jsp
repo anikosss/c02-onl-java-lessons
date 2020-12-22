@@ -9,13 +9,21 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Products</title>
 </head>
-<h2>Products:</h2>
 <body>
+<h2>Products:</h2>
     <c:forEach var="product" items="${products}">
         ID: ${product.id}
         Title: ${product.title}
         Description: ${product.description}
         Price: ${product.price}$
+        <br>
+    </c:forEach>
+    <br><br><br>
+<h2>Clients:</h2>
+    <c:forEach var="client" items="${clients}">
+        ID: ${client.id}
+        first name: ${client.firstName}
+        last name: ${client.lastName}
         <br>
     </c:forEach>
 </body>

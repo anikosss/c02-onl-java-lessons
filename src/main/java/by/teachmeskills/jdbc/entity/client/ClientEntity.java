@@ -5,6 +5,7 @@ import by.teachmeskills.jdbc.entity.address.AddressEntity;
 import by.teachmeskills.jdbc.entity.order.OrderEntity;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -26,11 +27,11 @@ public class ClientEntity extends AbstractEntity {
     @Column(name = "last_name")
     private String lastName;
 
-    @OneToOne(optional = false)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id_fk", referencedColumnName = "id")
     private AddressEntity address;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id_fk", referencedColumnName = "id")
     private List<OrderEntity> orders;
 

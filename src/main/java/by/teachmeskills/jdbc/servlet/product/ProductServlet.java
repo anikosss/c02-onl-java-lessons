@@ -3,6 +3,9 @@ package by.teachmeskills.jdbc.servlet.product;
 import by.teachmeskills.jdbc.dao.impl.mysql.init.MySqlDAOInitializer;
 import by.teachmeskills.jdbc.dao.impl.orm.init.OrmDAOInitializer;
 import by.teachmeskills.jdbc.dao.init.DAOInitializer;
+import by.teachmeskills.jdbc.entity.client.ClientEntity;
+import by.teachmeskills.jdbc.service.client.ClientService;
+import by.teachmeskills.jdbc.service.client.impl.ClientServiceImpl;
 import by.teachmeskills.jdbc.service.dto.ProductDTO;
 import by.teachmeskills.jdbc.service.product.ProductService;
 import by.teachmeskills.jdbc.service.product.impl.ProductServiceImpl;
@@ -27,6 +30,7 @@ public class ProductServlet extends HttpServlet {
     private static final String PRODUCTS_KEY = "products";
 
     private ProductService productService = new ProductServiceImpl();
+    private ClientService clientService = new ClientServiceImpl();
 
     @Override
     public void init() throws ServletException {
@@ -38,8 +42,9 @@ public class ProductServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         List<ProductDTO> products = productService.getAllProducts();
+        final List<ClientEntity> clients = clientService.getAll();
         request.setAttribute(PRODUCTS_KEY, products);
+        request.setAttribute("clients", clients);
         request.getRequestDispatcher(Pages.PRODUCTS).forward(request, response);
-        request.getRequestDispatcher("products.jsp").forward(request, response);
     }
 }

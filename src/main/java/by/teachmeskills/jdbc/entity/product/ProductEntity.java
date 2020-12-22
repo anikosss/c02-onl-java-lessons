@@ -1,9 +1,16 @@
 package by.teachmeskills.jdbc.entity.product;
 
 import by.teachmeskills.jdbc.entity.AbstractEntity;
+import by.teachmeskills.jdbc.entity.order.OrderEntity;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -14,6 +21,14 @@ public class ProductEntity extends AbstractEntity {
     private String title;
     private String description;
     private double price;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "orders_products", joinColumns = {
+        @JoinColumn(name = "product_id_fk", referencedColumnName = "id")
+    }, inverseJoinColumns = {
+        @JoinColumn(name = "order_id_fk", referencedColumnName = "id")
+    })
+    private List<OrderEntity> orders;
 
     public ProductEntity() {}
 
@@ -53,5 +68,9 @@ public class ProductEntity extends AbstractEntity {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public List<OrderEntity> getOrders() {
+        return new ArrayList<>(orders);
     }
 }

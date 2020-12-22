@@ -27,18 +27,16 @@ public class OrderEntity extends AbstractEntity {
 
     private Date date;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id_fk", referencedColumnName = "id")
     private ClientEntity client;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "orders_products",
-        joinColumns = {
-            @JoinColumn(name = "order_id_fk", referencedColumnName = "id")
-        },
-        inverseJoinColumns = {
-            @JoinColumn(name = "product_id_fk", referencedColumnName = "id")
-        })
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "orders_products", joinColumns = {
+        @JoinColumn(name = "order_id_fk", referencedColumnName = "id")
+    }, inverseJoinColumns = {
+        @JoinColumn(name = "product_id_fk", referencedColumnName = "id")
+    })
     private List<ProductEntity> products;
 
     public OrderEntity() {}
