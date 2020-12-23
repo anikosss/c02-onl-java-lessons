@@ -2,42 +2,37 @@ package by.teachmeskills.jdbc.dao.impl.orm;
 
 import by.teachmeskills.jdbc.dao.AbstractDAO;
 import by.teachmeskills.jdbc.dao.exception.DAOException;
-import by.teachmeskills.jdbc.dao.impl.orm.session.SessionFactoryProvider;
+import by.teachmeskills.jdbc.dao.impl.orm.provider.EntityManagerFactoryProvider;
+import by.teachmeskills.jdbc.dao.impl.orm.util.manager.EntityManagerWrapper;
 import by.teachmeskills.jdbc.entity.IEntity;
 import java.util.List;
 import java.util.Optional;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaQuery;
 
 @SuppressWarnings("unchecked")
 public abstract class ORMAbstractDAO<E extends IEntity> extends AbstractDAO<E> {
 
-    private static final SessionFactoryProvider SESSION_FACTORY_PROVIDER = SessionFactoryProvider.getInstance();
+    private static final EntityManagerFactoryProvider ENTITY_MANAGER_FACTORY_PROVIDER = EntityManagerFactoryProvider.getInstance();
 
     @Override
     public E create(E entity) throws DAOException {
-        Transaction transaction = null;
-        try(Session session = openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(entity);
-            session.flush();
-            transaction.commit();
+        try(EntityManagerWrapper entityManagerWrapper = getEntityManagerWrapper()) {
+            EntityManager entityManager = entityManagerWrapper.getEntityManager();
+            entityManager.persist(entity);
+            entityManager.refresh(entity);
             return entity;
         } catch (Exception e) {
             LOGGER.error("Unable to save entity: {}", e.getMessage(), e);
-            if (transaction != null) {
-                transaction.rollback();
-            }
             throw new DAOException("Unable to save entity: " + e.getMessage(), e);
         }
     }
 
     @Override
     public Optional<E> getEntity(Long id) throws DAOException {
-        try (Session session = openSession()) {
-            E entity = session.get(getEntityClass(), id);
-            return Optional.ofNullable(entity);
+        try(EntityManagerWrapper entityManagerWrapper = getEntityManagerWrapper()) {
+            EntityManager entityManager = entityManagerWrapper.getEntityManager();
+            return Optional.ofNullable(entityManager.find(getEntityClass(), id));
         } catch (Exception e) {
             LOGGER.error("Unable to load entity: {}", e.getMessage(), e);
             throw new DAOException("Unable to load entity: " + e.getMessage(), e);
@@ -46,8 +41,10 @@ public abstract class ORMAbstractDAO<E extends IEntity> extends AbstractDAO<E> {
 
     @Override
     public List<E> getAll() throws DAOException {
-        try (Session session = openSession()) {
-            return session.createQuery(getAllQuery()).getResultList();
+        try(EntityManagerWrapper entityManagerWrapper = getEntityManagerWrapper()) {
+            EntityManager entityManager = entityManagerWrapper.getEntityManager();
+            CriteriaQuery<E> criteria = entityManager.getCriteriaBuilder().createQuery(getEntityClass());
+            return entityManager.createQuery(criteria.select(criteria.from(getEntityClass()))).getResultList();
         } catch (Exception e) {
             LOGGER.error("Unable to load entities: {}", e.getMessage(), e);
             throw new DAOException("Unable to load entities: " + e.getMessage(), e);
@@ -56,8 +53,9 @@ public abstract class ORMAbstractDAO<E extends IEntity> extends AbstractDAO<E> {
 
     @Override
     public E updateEntity(E entity) throws DAOException {
-        try (Session session = openSession()) {
-            return (E) session.merge(entity);
+        try(EntityManagerWrapper entityManagerWrapper = getEntityManagerWrapper()) {
+            EntityManager entityManager = entityManagerWrapper.getEntityManager();
+            return entityManager.merge(entity);
         } catch (Exception e) {
             LOGGER.error("Unable to update entity: {}", e.getMessage(), e);
             throw new DAOException("Unable to update entity: " + e.getMessage(), e);
@@ -66,30 +64,21 @@ public abstract class ORMAbstractDAO<E extends IEntity> extends AbstractDAO<E> {
 
     @Override
     public void deleteEntity(Long id) throws DAOException {
-        Transaction transaction = null;
-        try (Session session = openSession()) {
-            transaction = session.beginTransaction();
-            session.delete(session.get(getEntityClass(), id));
-            session.flush();
-            transaction.commit();
+        try(EntityManagerWrapper entityManagerWrapper = getEntityManagerWrapper()) {
+            EntityManager entityManager = entityManagerWrapper.getEntityManager();
+            Optional<E> entityOptional = getEntity(id);
+            entityOptional.ifPresent(entityManager::remove);
         } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             LOGGER.error("Unable to delete entity: {}", e.getMessage(), e);
             throw new DAOException("Unable to delete entity: " + e.getMessage(), e);
         }
     }
 
-    protected abstract String getAllQuery();
     protected abstract Class<E> getEntityClass();
 
-    protected Session openSession() {
-        return getSessionFactory().openSession();
-    }
 
-    protected SessionFactory getSessionFactory() {
-        return SESSION_FACTORY_PROVIDER.getSessionFactory();
+    protected EntityManagerWrapper getEntityManagerWrapper() {
+        return new EntityManagerWrapper(ENTITY_MANAGER_FACTORY_PROVIDER.getEntityManagerFactory().createEntityManager());
     }
 
 }

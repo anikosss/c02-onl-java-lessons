@@ -1,5 +1,10 @@
 package by.teachmeskills.jdbc.entity.product;
 
+import static by.teachmeskills.jdbc.dao.impl.orm.query.product.ProductJPQLQueries.GET_BY_TITLE;
+import static by.teachmeskills.jdbc.dao.impl.orm.query.product.ProductJPQLQueries.GET_BY_TITLE_NAME;
+
+
+import by.teachmeskills.jdbc.dao.impl.orm.query.product.ProductJPQLQueries;
 import by.teachmeskills.jdbc.entity.AbstractEntity;
 import by.teachmeskills.jdbc.entity.order.OrderEntity;
 import java.util.ArrayList;
@@ -11,11 +16,16 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "products")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@NamedQueries({
+    @NamedQuery(name = GET_BY_TITLE_NAME, query = GET_BY_TITLE)
+})
 public class ProductEntity extends AbstractEntity {
 
     private String title;

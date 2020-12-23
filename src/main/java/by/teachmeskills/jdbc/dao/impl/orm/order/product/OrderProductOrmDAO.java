@@ -7,11 +7,6 @@ import by.teachmeskills.jdbc.entity.order.product.OrderProductEntity;
 public class OrderProductOrmDAO extends ORMAbstractDAO<OrderProductEntity> implements OrderProductDAO {
 
     @Override
-    protected String getAllQuery() {
-        return "FROM OrderProductEntity";
-    }
-
-    @Override
     protected Class<OrderProductEntity> getEntityClass() {
         return OrderProductEntity.class;
     }

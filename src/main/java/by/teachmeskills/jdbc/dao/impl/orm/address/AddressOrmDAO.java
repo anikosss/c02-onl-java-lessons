@@ -7,11 +7,6 @@ import by.teachmeskills.jdbc.entity.address.AddressEntity;
 public class AddressOrmDAO extends ORMAbstractDAO<AddressEntity> implements AddressDAO {
 
     @Override
-    protected String getAllQuery() {
-        return "FROM AddressEntity";
-    }
-
-    @Override
     protected Class<AddressEntity> getEntityClass() {
         return AddressEntity.class;
     }

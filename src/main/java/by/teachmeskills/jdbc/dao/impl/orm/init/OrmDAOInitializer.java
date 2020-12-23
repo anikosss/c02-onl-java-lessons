@@ -1,6 +1,6 @@
 package by.teachmeskills.jdbc.dao.impl.orm.init;
 
-import by.teachmeskills.jdbc.dao.impl.orm.session.SessionFactoryProvider;
+import by.teachmeskills.jdbc.dao.impl.orm.provider.SessionFactoryProvider;
 import by.teachmeskills.jdbc.dao.init.DAOInitializer;
 
 public class OrmDAOInitializer implements DAOInitializer {
