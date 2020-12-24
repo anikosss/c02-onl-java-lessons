@@ -1,0 +1,29 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+    version="2.0">
+    <persistence-unit name="Hibernate">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+<!--        <jta-data-source>java:/DefaultDS</jta-data-source>-->
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/lesson27_jdbc?useSSL=false"/>
+            <property name="javax.persistence.jdbc.user" value="root"/>
+            <property name="javax.persistence.jdbc.password" value="9366"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.connection.pool_size" value="3"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.current_session_context_class" value="thread"/>
+            <property name="hibernate.dbcp.initialSize" value="5"/>
+            <property name="hibernate.dbcp.maxTotal" value="20"/>
+            <property name="hibernate.dbcp.maxIdle" value="10"/>
+            <property name="hibernate.dbcp.minIdle" value="5"/>
+        </properties>
+<!--        <class>by.teachmeskills.jdbc.entity.product.ProductEntity</class>-->
+<!--        <class>by.teachmeskills.jdbc.entity.client.ClientEntity</class>-->
+<!--        <class>by.teachmeskills.jdbc.entity.order.OrderEntity</class>-->
+<!--        <class>by.teachmeskills.jdbc.entity.address.AddressEntity</class>-->
+<!--        <class>by.teachmeskills.jdbc.entity.order.product.OrderProductEntity</class>-->
+    </persistence-unit>
+</persistence>

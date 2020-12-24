@@ -1,4 +1,4 @@
-package by.teachmeskills.jdbc.dao.impl.orm.session;
+package by.teachmeskills.jdbc.dao.impl.orm.provider;
 
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
