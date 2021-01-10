@@ -1,0 +1,65 @@
+package by.teachmeskills.calculator;
+
+import by.teachmeskills.opetation.ISimpleOperation;
+import by.teachmeskills.util.CalculatorUtils;
+import java.text.DecimalFormat;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
+
+@Component
+public class Calculator {
+
+    private boolean isOpen = false;
+    private ApplicationContext context;
+    private CalculatorUtils calculatorUtils;
+
+
+    public void run() {
+        isOpen = true;
+        while (isOpen) {
+            final int a = calculatorUtils.readIntValue("Enter first number: ");
+            final int b = calculatorUtils.readIntValue("Enter second number: ");
+            final ISimpleOperation simpleOperation = resolveOperation();
+            final double result = simpleOperation.process(a, b);
+            System.out.printf("Result is: " + new DecimalFormat("#0.00").format(result) + "\n");
+            System.out.println("=======================================================");
+            final boolean isContinue = calculatorUtils.readBooleanValue("Continue? (true/false)");
+            if (!isContinue) {
+                setOpen(false);
+            }
+        }
+    }
+
+    private ISimpleOperation resolveOperation() {
+        ISimpleOperation simpleOperation = null;
+        while (simpleOperation == null) {
+            String operation = calculatorUtils.readStringValue("Enter operation (available operations: +,-,*,/): ");
+            try {
+                simpleOperation = context.getBean("operation" + operation, ISimpleOperation.class);
+            } catch (BeansException e) {
+                System.out.println("Wrong operation type entered, available operations: +,-,/,*");
+            }
+        }
+        return simpleOperation;
+    }
+
+    public void setOpen(boolean open) {
+        isOpen = open;
+    }
+
+    public boolean isOpen() {
+        return isOpen;
+    }
+
+    @Autowired
+    public void setContext(ApplicationContext context) {
+        this.context = context;
+    }
+
+    @Autowired
+    public void setCalculatorUtils(CalculatorUtils calculatorUtils) {
+        this.calculatorUtils = calculatorUtils;
+    }
+}
