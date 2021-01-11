@@ -1,7 +1,6 @@
 package by.teachmeskills.controller.user;
 
 import by.teachmeskills.model.User;
-import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -19,14 +17,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class UserController {
 
     @GetMapping
-    public String getUsersPage(Model model, @RequestParam Map<String, String> params) {
-        User user = new User();
-        if (!params.isEmpty()) {
-            System.out.println(params.get("qwe"));
-        }
-        user.setName("firstName");
-        model.addAttribute("user", new User());
+    public String getUsersPage() {
         return "user";
+    }
+
+    @ModelAttribute("user")
+    public User getUser() {
+        return new User();
     }
 
     @GetMapping("/{id}")
