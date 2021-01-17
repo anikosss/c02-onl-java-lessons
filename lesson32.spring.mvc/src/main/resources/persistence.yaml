@@ -6,7 +6,7 @@ jdbc:
 
 hibernate:
   hbm2ddl:
-    auto: create-drop
+    auto: validate
   dialect: org.hibernate.dialect.MySQL5Dialect
   connection:
     pool_size: 3
