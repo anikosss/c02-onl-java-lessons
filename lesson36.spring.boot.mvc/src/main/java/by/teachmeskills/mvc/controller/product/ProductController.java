@@ -37,26 +37,26 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ModelAndView product(@PathVariable Long id) {
-        return new ModelAndView("product-info", "product", productService.getProductById(id));
+        return new ModelAndView("product/product-info", "product", productService.getProductById(id));
     }
 
     @PostMapping("/add")
     public ModelAndView createProduct(@ModelAttribute("product") ProductModel product, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("product-add");
+            return new ModelAndView("product/product-add");
         }
         ProductModel createdProduct;
         try {
             createdProduct = productService.createProduct(product);
         } catch (ServiceException e) {
-            return new ModelAndView("product-add", "message", e.getMessage());
+            return new ModelAndView("product/product-add", "message", e.getMessage());
         }
         return new ModelAndView("redirect:/products/" + createdProduct.getId(), "product", createdProduct);
     }
 
     @GetMapping("/add")
     public String getCreateProduct() {
-        return "product-add";
+        return "product/product-add";
     }
 
     @Autowired

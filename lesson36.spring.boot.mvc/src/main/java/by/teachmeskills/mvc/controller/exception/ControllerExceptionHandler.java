@@ -13,14 +13,14 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
     public String handleGlobal(Model model, Throwable e) {
-        model.addAttribute("message", e.getMessage());
-        return "error500";
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error/error500";
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNotFound(Throwable e) {
-        return new ModelAndView("error404", "message", e.getMessage());
+        return new ModelAndView("error/error404", "errorMessage", e.getMessage());
     }
 
 }
