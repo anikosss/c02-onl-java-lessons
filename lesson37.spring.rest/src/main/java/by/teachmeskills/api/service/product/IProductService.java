@@ -10,5 +10,6 @@ public interface IProductService {
     ProductModel createProduct(ProductModel productModel);
     ProductModel updateProduct(ProductModel productModel);
     void deleteProduct(Long id);
+    Integer getTotalCount();
 
 }

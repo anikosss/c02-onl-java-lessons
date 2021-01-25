@@ -6,11 +6,13 @@ import by.teachmeskills.api.dao.product.ProductDAO;
 import by.teachmeskills.api.entity.product.ProductEntity;
 import by.teachmeskills.api.exception.NotFoundException;
 import by.teachmeskills.api.model.product.ProductModel;
+import by.teachmeskills.api.repository.product.ProductRepository;
 import by.teachmeskills.api.service.AbstractService;
 import by.teachmeskills.api.service.ServiceException;
 import by.teachmeskills.api.service.product.IProductService;
 import java.util.List;
 import java.util.Optional;
+import org.glassfish.jersey.internal.guava.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +21,12 @@ public class ProductServiceImpl extends AbstractService implements IProductServi
 
     private ProductDAO productDAO;
     private IConverter<ProductModel, ProductEntity> productConverter;
+    private ProductRepository productRepository;
 
     @Override
     public List<ProductModel> getAllProducts() {
-        return productConverter.convertAllToModels(productDAO.getAll());
+        return productConverter.convertAllToModels(Lists
+            .newArrayList(productRepository.findAll()));
     }
 
     @Override
@@ -54,6 +58,11 @@ public class ProductServiceImpl extends AbstractService implements IProductServi
         productDAO.deleteEntity(id);
     }
 
+    @Override
+    public Integer getTotalCount() {
+        return productRepository.getTotalCount();
+    }
+
     @Autowired
     public void setProductDAO(ProductDAO productDAO) {
         this.productDAO = productDAO;
@@ -62,5 +71,10 @@ public class ProductServiceImpl extends AbstractService implements IProductServi
     @Autowired
     public void setProductConverter(IConverter<ProductModel, ProductEntity> productConverter) {
         this.productConverter = productConverter;
+    }
+
+    @Autowired
+    public void setProductRepository(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 }

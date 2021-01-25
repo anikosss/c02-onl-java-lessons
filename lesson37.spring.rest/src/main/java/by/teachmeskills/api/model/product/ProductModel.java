@@ -1,18 +1,20 @@
 package by.teachmeskills.api.model.product;
 
 import by.teachmeskills.api.model.AbstractModel;
+import by.teachmeskills.api.validator.ValidProductPrice;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class ProductModel extends AbstractModel {
 
-    @NotBlank
+    @NotBlank(message = "{product.title.not.empty}")
     private String title;
     @NotBlank
     private String description;
     @NotNull
     @Min(0)
+    @ValidProductPrice(min = 50)
     private double price;
 
     public ProductModel() {}

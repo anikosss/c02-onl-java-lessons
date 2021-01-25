@@ -34,3 +34,11 @@ logging:
       hibernate:
         type: trace
         stat: debug
+
+springdoc:
+  swagger-ui:
+    enabled: true
+
+product:
+  min:
+    price: 100

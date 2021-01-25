@@ -2,11 +2,15 @@ package by.teachmeskills.api.controller.product;
 
 import by.teachmeskills.api.model.product.ProductModel;
 import by.teachmeskills.api.service.product.IProductService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -24,7 +29,10 @@ public class ProductController {
     private IProductService productService;
 
     @PostMapping
-    public ResponseEntity<ProductModel> createProduct(@Valid @RequestBody ProductModel productModel) throws URISyntaxException {
+    @Operation(summary = "Create new product", description = "Create new product")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<ProductModel> createProduct(
+        @Parameter(name = "product model", required = true, description = "Product to created") @Valid @RequestBody ProductModel productModel) throws URISyntaxException {
         final ProductModel product = productService.createProduct(productModel);
         final String uri = "/products/" + product.getId();
         return ResponseEntity.created(new URI(uri)).body(product);
@@ -37,7 +45,9 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<ProductModel>> getAll() {
-        return ResponseEntity.ok(productService.getAllProducts());
+        return ResponseEntity.status(HttpStatus.OK)
+            .header("X-Total-Count", productService.getTotalCount().toString())
+            .body(productService.getAllProducts());
     }
 
     @PutMapping("/{id}")

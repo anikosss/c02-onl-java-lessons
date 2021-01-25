@@ -7,10 +7,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
@@ -25,5 +28,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         HttpStatus status, WebRequest request) {
         return ResponseEntity.status(status).headers(headers).body(new ErrorModel(status.value(), "Request body is invalid",
             ex.getMessage()));
+    }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorModel> error(Throwable e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorModel(500, e.getMessage(), e.toString()));
     }
 }
