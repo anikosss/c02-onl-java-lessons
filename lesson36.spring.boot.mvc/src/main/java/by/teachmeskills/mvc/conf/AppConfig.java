@@ -1,9 +1,11 @@
 package by.teachmeskills.mvc.conf;
 
+import by.teachmeskills.mvc.controller.interceptor.ControllerInterceptor;
 import java.util.Locale;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InjectionPoint;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
@@ -23,12 +26,15 @@ public class AppConfig implements WebMvcConfigurer {
     @Value("${app.lang.param:lang}")
     private String langParam;
 
+    @Autowired
+    private ControllerInterceptor controllerInterceptor;
+
 
     /* Beans */
 
     @Bean
     public Logger logger(InjectionPoint injectionPoint) {
-        return LogManager.getLogger(injectionPoint.getDeclaredType());
+        return LoggerFactory.getLogger(injectionPoint.getDeclaredType());
     }
 
     /* MVC config */
@@ -41,6 +47,12 @@ public class AppConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(localeChangeInterceptor());
+        registry.addInterceptor(controllerInterceptor);
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login.html");
     }
 
     /* View resolvers config */

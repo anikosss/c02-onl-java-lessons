@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 
 @MappedSuperclass
 public abstract class AbstractEntity implements IEntity {
@@ -23,6 +24,11 @@ public abstract class AbstractEntity implements IEntity {
     }
 
     public AbstractEntity() {
+    }
+
+    @PrePersist
+    public void init() {
+        this.id = null;
     }
 
     @Override
